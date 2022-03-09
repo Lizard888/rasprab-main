@@ -1,0 +1,149 @@
+import datetime
+import re
+import calendar
+
+import mysql.connector
+from mysql.connector import Error
+
+import pdb
+import mysql.connector
+def bazad(ld):
+   
+  ur=[]
+  now = datetime.datetime.now()
+
+
+
+  ye=int(now.year)
+
+  chas=int(now.hour)
+
+
+  mi=int( now.minute)
+
+  mes=int(now.month)
+  chis=int(now.day)
+
+  post=0
+  nomden=calendar.weekday(ye,mes,chis)
+
+ 
+  #den=kalen.get(nomden)
+  den="sunday"
+  #if den=="saturday" or den=="sunday":
+   # den="mondey"
+ 
+  try:
+    conn = mysql.connector.connect(
+         user='root',
+         #password='lizard',
+         host='localhost',
+         database='rasp')
+    if conn.is_connected():
+            print('Connected to MySQL database')
+
+  except Error as e:
+    print('e=',e)
+
+
+  n=0
+  chasi=19
+  mi=45
+
+  nasden1=nomden+1
+  ur={}
+  ld=[]
+  print('den1=',den)
+ 
+  def vibor(chasi,den,nomden): 
+   global kkk1
+   global kkk2
+   global kkk3
+   global ld
+   #global chasi
+   #global den
+   global she
+   global dd
+   global query
+   #global den
+   global cur
+   #global nomden
+   #global kalen
+   kalen={}
+   kalen={0:"mondey",
+         1:"tuesday",
+         2:"wednesday",
+         3:"thursday",
+         4:"friday",
+         5:"saturday",
+         6:"sunday"}
+  
+   print('den2=',den)
+   print('nomden1 =',nomden)
+ 
+    
+   #she=she+1
+   dd=0
+   kkk1=[]
+   kkk2=[]
+   kkk3=[]
+ 
+
+   cur = conn.cursor()
+   query = ("SELECT * FROM %s" % den) #работает
+   cur.execute(query)
+  
+   
+   for (n) in cur:  
+      kkk2.append(n[2])
+      kkk1.append(n[1])
+      kkk3.append(n[3])
+     
+   print('oldden=',den)         
+   print(kkk1)
+   print(kkk2)
+   print(kkk3)
+   le=len(kkk2)
+ 
+   print('dd=',dd)
+   pdb.set_trace()  
+   if int(kkk2[le-1])==chasi:
+     if abs(int(kkk3[le-1])- mi)>=2: ld.append('Go home')
+ 
+   if abs(int(kkk2[le-1])-chasi)>=4 and dd==0:   
+     if den=="mondey" : den=kalen.get(nomden+1)# следующий день
+     elif den=="saturday" or den=="sunday":
+       den="mondey"
+       dd=1
+       chasi=8
+       vibor(chasi,den,nomden)
+
+   i=0
+   zz=0
+   lld=0
+
+   print(type(mi))
+   if  int(kkk2[i])>=chasi:
+          ld=kkk1
+
+   else:  
+    lld=kkk2.index(str(chasi))
+    i=lld
+ 
+   if abs(int(kkk3[i])-mi)>2 and int(kkk3[i])<mi:  i=lld+1
+     
+   elif  abs(int(kkk3[i])-mi)<=2 and int(kkk3[i])>mi: i=lld 
+  
+   while i!=le:
+      ld.append(kkk1[i])
+      i=i+1
+    
+  vibor(chasi,den,nomden)
+  print(ld)
+
+
+
+
+
+
+   
